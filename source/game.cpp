@@ -78,6 +78,7 @@ void Game::start_game()
 
 void Game::next_player_turn()
 {
+    DEBUG("Starting next turn\n");
     this->player = this->player == GRID_RED ? GRID_YELLOW : GRID_RED;
     this->selected_column = ceil(BOARD_WIDTH / 2.0);
     this->choosing_pop_out = false;
@@ -174,12 +175,14 @@ void Game::update()
 
     if(this->input->keys[JKEY_PLUS])
     {
+        DEBUG("plus pressed, exiting\n");
         this->running = false;
     }
     else if(this->tie || this->winner != GRID_EMPTY)  // Dont need a state for game done if you always check if someone won
     {
         if(this->input->keys[JKEY_MINUS])
         {
+            DEBUG("minus pressed, starting actual new game\n");
             if(this->tie)
                 this->winner = this->last_winner;
             this->player = this->winner;  // Gets reversed in the next_player_turn inside start_game
@@ -190,6 +193,7 @@ void Game::update()
     {
         if(this->game_state == GAME_STATE_CHOOSING_MODE)
         {
+            DEBUG("switching to playing mode\n");
             this->game_state = GAME_STATE_PLAYING;
         }
         else if(this->game_state == GAME_STATE_PLAYING)

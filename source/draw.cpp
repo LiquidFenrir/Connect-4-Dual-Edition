@@ -32,6 +32,7 @@ Interface::Interface()
     this->create_compound_images();
 
     #define LOAD_IMG_TO_IMAGES(name, path) do { \
+        DEBUG("LOAD_IMG_TO_IMAGES: %s, %s\n", name, path); \
         SDL_Surface* surface = IMG_Load(path); \
         this->images[name] = {surface->w, surface->h, SDL_CreateTextureFromSurface(this->renderer, surface)}; \
         SDL_FreeSurface(surface); \
@@ -124,6 +125,7 @@ void Interface::create_compound_images()
     } while(false)
 
     #define LOAD_IMG_TO_TEXTURE(path) do { \
+        DEBUG("LOAD_IMG_TO_TEXTURE: %s\n", path); \
         source_surface = IMG_Load(path); \
         width = source_surface->w; \
         height = source_surface->h; \
@@ -141,6 +143,7 @@ void Interface::create_compound_images()
     } while(false)
 
     #define SAVE_COMPOUND_IMAGE(name) do { \
+        DEBUG("SAVE_COMPOUND_IMAGE: %s\n", name); \
         SDL_DestroyRenderer(dest_renderer); \
         dest_renderer = nullptr; \
         this->images[name] = {dest_surface_width, dest_surface_height, SDL_CreateTextureFromSurface(this->renderer, dest_surface)}; \
