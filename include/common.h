@@ -18,7 +18,7 @@ extern "C" {
 #include <math.h>
 }
 
-// #define NODEBUG
+#define NODEBUG
 #ifdef NODEBUG
 #define DEBUG(...)
 #else

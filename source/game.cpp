@@ -65,7 +65,7 @@ bool Game::get_action(GameAction action)
 
 void Game::start_game()
 {
-    DEBUG("Starting new game\n")
+    DEBUG("Starting new game\n");
     this->tie = false;
     this->last_winner = this->winner;
     this->winner = GRID_EMPTY;
