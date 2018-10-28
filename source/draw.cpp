@@ -338,14 +338,14 @@ void Interface::draw_text(SDL_Color color, const char* text)
     static const SDL_Rect inner_rect = {
         outer_rect.x + TEXT_RECT_BORDER_SIZE,
         outer_rect.y + TEXT_RECT_BORDER_SIZE,
-        outer_rect.width - TEXT_RECT_BORDER_SIZE*2,
-        outer_rect.height - TEXT_RECT_BORDER_SIZE*2
+        outer_rect.w - TEXT_RECT_BORDER_SIZE*2,
+        outer_rect.h - TEXT_RECT_BORDER_SIZE*2
     };
     SDL_RenderFillRect(this->renderer, &inner_rect);
 
     #ifndef NOFONT
     SDL_SetRenderDrawColor(this->renderer, color.r, color.g, color.b, color.a);
-    FC_DrawAlign(this->font, this->renderer, SCREEN_WIDTH/2, (outer_rect.y + outer_rect.height)/2 - FONT_SIZE/2, FC_ALIGN_CENTER, text);
+    FC_DrawAlign(this->font, this->renderer, SCREEN_WIDTH/2, (outer_rect.y + outer_rect.h)/2 - FONT_SIZE/2, FC_ALIGN_CENTER, text);
     #endif
     SDL_SetRenderDrawColor(this->renderer, 0,0,0,255);
 }
