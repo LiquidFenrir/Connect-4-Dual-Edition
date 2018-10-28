@@ -330,21 +330,22 @@ void Interface::draw_text(SDL_Color color, const char* text)
     #define TEXT_RECT_Y 16
     #define TEXT_RECT_BORDER_SIZE 3
 
-    static const SDL_Rect outer_rect = {TEXT_RECT_X, TEXT_RECT_Y, SCREEN_WIDTH - TEXT_RECT_X*2, FONT_SIZE + FONT_SIZE/2};
+    SDL_SetRenderDrawColor(this->renderer, color.r, color.g, color.b, color.a);
+    static const SDL_Rect outer_rect = {TEXT_RECT_X, TEXT_RECT_Y, SCREEN_WIDTH - TEXT_RECT_X*2, FONT_SIZE*2 + FONT_SIZE/2};
     SDL_RenderFillRect(this->renderer, &outer_rect);
 
     SDL_SetRenderDrawColor(this->renderer, 255,255,255,255);
     static const SDL_Rect inner_rect = {
-        TEXT_RECT_X + TEXT_RECT_BORDER_SIZE,
-        TEXT_RECT_Y + TEXT_RECT_BORDER_SIZE,
-        SCREEN_WIDTH - TEXT_RECT_X*2 - TEXT_RECT_BORDER_SIZE*2,
-        FONT_SIZE + FONT_SIZE/2 - TEXT_RECT_BORDER_SIZE*2
+        outer_rect.x TEXT_RECT_BORDER_SIZE,
+        outer_rect.y + TEXT_RECT_BORDER_SIZE,
+        outer_rect.width - TEXT_RECT_BORDER_SIZE*2,
+        outer_rect.height - TEXT_RECT_BORDER_SIZE*2
     };
     SDL_RenderFillRect(this->renderer, &inner_rect);
 
     #ifndef NOFONT
     SDL_SetRenderDrawColor(this->renderer, color.r, color.g, color.b, color.a);
-    FC_DrawAlign(this->font, this->renderer, SCREEN_WIDTH/2, 16 + FONT_SIZE/2 + TEXT_RECT_BORDER_SIZE, FC_ALIGN_CENTER, text);
+    FC_DrawAlign(this->font, this->renderer, SCREEN_WIDTH/2, (outer_rect.y + outer_rect.height)/2 - FONT_SIZE/2, FC_ALIGN_CENTER, text);
     #endif
     SDL_SetRenderDrawColor(this->renderer, 0,0,0,255);
 }
