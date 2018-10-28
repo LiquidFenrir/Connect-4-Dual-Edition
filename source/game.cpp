@@ -145,19 +145,22 @@ void Game::draw()
     }
     else if(this->tie)
     {
-        this->interface->draw_text(FC_MakeColor(0, 38, 255, 255), "It's a TIE! Press - to start a new game!");
+        this->interface->draw_text(FC_MakeColor(0, 38, 255, 255), "It's a TIE! Press \uE0B6 to start a new game!");
     }
     else if(this->winner == GRID_RED)
     {
-        this->interface->draw_text(FC_MakeColor(255, 0, 0, 255), "The RED player won! Press - to start a new game!");
+        this->interface->draw_text(FC_MakeColor(255, 0, 0, 255), "The RED player won! Press \uE0B6 to start a new game!");
     }
     else if(this->winner == GRID_YELLOW)
     {
-        this->interface->draw_text(FC_MakeColor(255, 0, 0, 255), "The YELLOW player won! Press - to start a new game!");
+        this->interface->draw_text(FC_MakeColor(255, 0, 0, 255), "The YELLOW player won! Press \uE0B6 to start a new game!");
     }
     else if(this->game_state == GAME_STATE_CHOOSING_MODE)
     {
-        this->interface->draw_text(FC_MakeColor(255, 216, 0, 255), "Press the analog stick to start a new game!");
+        if(this->player == GRID_RED)
+            this->interface->draw_text(FC_MakeColor(255, 216, 0, 255), "Press \uE0C4 to start a new game!");
+        else
+            this->interface->draw_text(FC_MakeColor(255, 216, 0, 255), "Press \uE0C5 to start a new game!");
     }
 
     this->interface->frame_end();
