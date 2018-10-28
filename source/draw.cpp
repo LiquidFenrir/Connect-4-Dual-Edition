@@ -13,8 +13,7 @@ Interface::Interface()
         return;
     }
 
-    // if(!(this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC)))
-    if(!(this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_SOFTWARE)))
+    if(!(this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC)))
     {
         DEBUG("renderer could not be created: %s\n", SDL_GetError());
         return;
