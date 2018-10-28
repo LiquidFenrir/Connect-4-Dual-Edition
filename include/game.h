@@ -28,7 +28,7 @@ class Game {
         Game(int argc, char** argv);
         ~Game();
 
-        bool running;
+        bool running = true;
 
         void update();
 
