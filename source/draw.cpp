@@ -345,7 +345,7 @@ void Interface::draw_text(SDL_Color color, const char* text)
 
     #ifndef NOFONT
     SDL_SetRenderDrawColor(this->renderer, color.r, color.g, color.b, color.a);
-    FC_DrawAlign(this->font, this->renderer, SCREEN_WIDTH/2, (outer_rect.y + outer_rect.h)/2 - FONT_SIZE/2, FC_ALIGN_CENTER, text);
+    FC_DrawAlign(this->font, this->renderer, SCREEN_WIDTH/2, outer_rect.y + (outer_rect.h - FONT_SIZE)/2, FC_ALIGN_CENTER, text);
     #endif
     SDL_SetRenderDrawColor(this->renderer, 0,0,0,255);
 }
