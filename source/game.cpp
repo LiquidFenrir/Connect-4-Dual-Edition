@@ -25,7 +25,9 @@ ActionToKeyMap Game::yellow_keys = {
 Game::Game(int argc, char** argv)
 {
     romfsInit();
+    #ifndef NOFONT
     plInitialize();
+    #endif
 
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_EVENTS) < 0)
     {
@@ -55,7 +57,9 @@ Game::~Game()
     SDL_Quit();
     DEBUG("Quit SDL.\n");
 
+    #ifndef NOFONT
     plExit();
+    #endif
     romfsExit();
 }
 

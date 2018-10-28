@@ -51,6 +51,7 @@ Interface::Interface()
     SDL_SetRenderDrawBlendMode(this->renderer, SDL_BLENDMODE_BLEND);
     SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255);
 
+    #ifndef NOFONT
     static PlFontData fontData, fontExtData;
     plGetSharedFontByType(&fontData, PlSharedFontType_Standard);
     plGetSharedFontByType(&fontExtData, PlSharedFontType_NintendoExt);
@@ -62,16 +63,19 @@ Interface::Interface()
     }
 
     FC_LoadFont_RW(this->font, this->renderer, SDL_RWFromMem((void*)fontData.address, fontData.size), SDL_RWFromMem((void*)fontExtData.address, fontExtData.size), 1, FONT_SIZE, FC_MakeColor(0, 0, 0, 255), TTF_STYLE_NORMAL);
+    #endif
 
     this->ready = true;
 }
 
 Interface::~Interface()
 {
+    #ifndef NOFONT
     if(this->font)
         FC_FreeFont(this->font);
 
     TTF_Quit();
+    #endif
 
     auto begin = this->images.begin();
     auto end = this->images.end();
@@ -338,7 +342,9 @@ void Interface::draw_text(SDL_Color color, const char* text)
     };
     SDL_RenderFillRect(this->renderer, &inner_rect);
 
+    #ifndef NOFONT
     SDL_SetRenderDrawColor(this->renderer, color.r, color.g, color.b, color.a);
     FC_DrawAlign(this->font, this->renderer, SCREEN_WIDTH/2, 16 + FONT_SIZE/2 + TEXT_RECT_BORDER_SIZE, FC_ALIGN_CENTER, text);
+    #endif
     SDL_SetRenderDrawColor(this->renderer, 0,0,0,255);
 }

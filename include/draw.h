@@ -1,7 +1,9 @@
 #pragma once
 
 #include "common.h"
+#ifndef NOFONT
 #include "SDL_FontCache.h"
+#endif
 
 constexpr int SCREEN_HEIGHT = 720;
 constexpr int SCREEN_WIDTH = 1280;
@@ -62,5 +64,7 @@ class Interface {
 
         SDL_Window* window = nullptr;
         SDL_Renderer* renderer = nullptr;
+        #ifndef NOFONT
         FC_Font* font = nullptr;
+        #endif
 };
