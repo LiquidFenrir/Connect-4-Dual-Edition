@@ -3,7 +3,10 @@
 
 extern "C" {
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 }
+
+#define FONT_SIZE 24
 
 Interface::Interface()
 {
@@ -16,6 +19,13 @@ Interface::Interface()
     if(!(this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC)))
     {
         DEBUG("renderer could not be created: %s\n", SDL_GetError());
+        return;
+    }
+
+    static const int img_flags = IMG_INIT_PNG;
+    if((IMG_Init(img_flags) & img_flags) != img_flags)
+    {
+        DEBUG("IMG_Init failed: %s\n", IMG_GetError());
         return;
     }
 
@@ -37,19 +47,39 @@ Interface::Interface()
  
     #undef LOAD_IMG_TO_IMAGES
 
+    SDL_SetRenderDrawBlendMode(this->renderer, SDL_BLENDMODE_BLEND);
     SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255);
+
+    static PlFontData fontData, fontExtData;
+    plGetSharedFontByType(&fontData, PlSharedFontType_Standard);
+    plGetSharedFontByType(&fontExtData, PlSharedFontType_NintendoExt);
+
+    if(!(this->font = FC_CreateFont()))
+    {
+        DEBUG("FC_CreateFont failed\n");
+        return;
+    }
+
+    FC_LoadFont_RW(this->font, this->renderer, SDL_RWFromMem((void*)fontData.address, fontData.size), SDL_RWFromMem((void*)fontExtData.address, fontExtData.size), 1, FONT_SIZE, FC_MakeColor(0, 0, 0, 255), TTF_STYLE_NORMAL);
 
     this->ready = true;
 }
 
 Interface::~Interface()
 {
+    if(this->font)
+        FC_FreeFont(this->font);
+
+    TTF_Quit();
+
     auto begin = this->images.begin();
     auto end = this->images.end();
     for(auto it = begin; it != end; ++it)
     {
         SDL_DestroyTexture(it->second.texture);
     }
+
+    IMG_Quit();
 
     if(this->renderer)
         SDL_DestroyRenderer(this->renderer);
@@ -285,4 +315,27 @@ void Interface::frame_start()
 void Interface::frame_end()
 {
     SDL_RenderPresent(this->renderer);
+}
+
+void Interface::draw_text(SDL_Color color, const char* text)
+{
+    #define TEXT_RECT_X 16
+    #define TEXT_RECT_Y 16
+    #define TEXT_RECT_BORDER_SIZE 3
+
+    static const SDL_Rect outer_rect = {TEXT_RECT_X, TEXT_RECT_Y, SCREEN_WIDTH - TEXT_RECT_X*2, FONT_SIZE + FONT_SIZE/2};
+    SDL_RenderFillRect(this->renderer, &outer_rect);
+
+    SDL_SetRenderDrawColor(this->renderer, 255,255,255,255);
+    static const SDL_Rect inner_rect = {
+        TEXT_RECT_X + TEXT_RECT_BORDER_SIZE,
+        TEXT_RECT_Y + TEXT_RECT_BORDER_SIZE,
+        SCREEN_WIDTH - TEXT_RECT_X*2 - TEXT_RECT_BORDER_SIZE*2,
+        FONT_SIZE + FONT_SIZE/2 - TEXT_RECT_BORDER_SIZE*2
+    };
+    SDL_RenderFillRect(this->renderer, &inner_rect);
+
+    SDL_SetRenderDrawColor(this->renderer, color.r, color.g, color.b, color.a);
+    FC_DrawAlign(this->font, this->renderer, SCREEN_WIDTH/2, 16 + FONT_SIZE/2 + TEXT_RECT_BORDER_SIZE, FC_ALIGN_CENTER, text);
+    SDL_SetRenderDrawColor(this->renderer, 0,0,0,255);
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.h"
+#include "SDL_FontCache.h"
 
 constexpr int SCREEN_HEIGHT = 720;
 constexpr int SCREEN_WIDTH = 1280;
@@ -26,6 +27,8 @@ class Interface {
         void frame_start();
         void frame_end();
 
+        void draw_text(SDL_Color color, const char* text);
+
         inline void draw_image_at(SDL_Texture* image, const SDL_Rect* dest_rect)
         {
             SDL_RenderCopy(this->renderer, image, NULL, dest_rect);
@@ -50,7 +53,6 @@ class Interface {
             this->draw_image_at(this->images[image], x, y);
         }
 
-        SDL_Renderer* renderer = nullptr;
         std::map<std::string, Texture> images;
 
         bool ready = false;
@@ -59,4 +61,6 @@ class Interface {
         void create_compound_images();
 
         SDL_Window* window = nullptr;
+        SDL_Renderer* renderer = nullptr;
+        FC_Font* font = nullptr;
 };

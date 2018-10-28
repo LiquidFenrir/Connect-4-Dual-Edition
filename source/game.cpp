@@ -25,6 +25,7 @@ ActionToKeyMap Game::yellow_keys = {
 Game::Game(int argc, char** argv)
 {
     romfsInit();
+    plInitialize();
 
     if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_EVENTS) < 0)
     {
@@ -54,6 +55,7 @@ Game::~Game()
     SDL_Quit();
     DEBUG("Quit SDL.\n");
 
+    plExit();
     romfsExit();
 }
 
@@ -85,7 +87,7 @@ void Game::draw()
 {
     this->interface->frame_start();
 
-    SDL_RenderCopy(this->interface->renderer, this->interface->images["background"].texture, NULL, NULL);
+    this->interface->draw_image_at("background", 0, 0);
 
     auto& grid = this->interface->images["grid"];
     static const int grid_base_x = (SCREEN_WIDTH - grid.width)/2;  // Won't ever change
@@ -140,6 +142,22 @@ void Game::draw()
             this->interface->draw_image_at(this->player == GRID_RED ? red_piece : yellow_piece, position_indicator_dest_rect.x + hand_offset_from_left_border, position_indicator_dest_rect.y + GRID_SQUARE_SIZE*2 + GRID_SQUARE_SIZE/2);
             this->interface->draw_image_at("thumb", &position_indicator_dest_rect);
         }
+    }
+    else if(this->tie)
+    {
+        this->interface->draw_text(FC_MakeColor(0, 38, 255, 255), "It's a TIE! Press - to start a new game!");
+    }
+    else if(this->winner == GRID_RED)
+    {
+        this->interface->draw_text(FC_MakeColor(255, 0, 0, 255), "The RED player won! Press - to start a new game!");
+    }
+    else if(this->winner == GRID_YELLOW)
+    {
+        this->interface->draw_text(FC_MakeColor(255, 0, 0, 255), "The YELLOW player won! Press - to start a new game!");
+    }
+    else if(this->game_state == GAME_STATE_CHOOSING_MODE)
+    {
+        this->interface->draw_text(FC_MakeColor(255, 216, 0, 255), "Press the analog stick to start a new game!");
     }
 
     this->interface->frame_end();
