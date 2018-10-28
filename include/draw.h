@@ -1,9 +1,7 @@
 #pragma once
 
 #include "common.h"
-#ifndef NOFONT
 #include "SDL_FontCache.h"
-#endif
 
 constexpr int SCREEN_HEIGHT = 720;
 constexpr int SCREEN_WIDTH = 1280;
