@@ -336,7 +336,7 @@ void Interface::draw_text(SDL_Color color, const char* text)
 
     SDL_SetRenderDrawColor(this->renderer, 255,255,255,255);
     static const SDL_Rect inner_rect = {
-        outer_rect.x TEXT_RECT_BORDER_SIZE,
+        outer_rect.x + TEXT_RECT_BORDER_SIZE,
         outer_rect.y + TEXT_RECT_BORDER_SIZE,
         outer_rect.width - TEXT_RECT_BORDER_SIZE*2,
         outer_rect.height - TEXT_RECT_BORDER_SIZE*2
