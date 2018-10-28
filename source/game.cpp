@@ -231,13 +231,14 @@ void Game::update()
                                     break;
                                 }
                             }
-                            
+
                             if(all_full)
                             {
                                 this->tie = true;
                                 return;  // Skip the next_player_turn
                             }
                         }
+
                         this->next_player_turn();
                     }
                 }
@@ -265,7 +266,7 @@ void Game::update()
         if(this->game_state == GAME_STATE_PLAYING)
         {
             this->selected_column++;
-            if(this->selected_column > BORDER_SIZE)
+            if(this->selected_column > BOARD_WIDTH)
                 this->selected_column = BORDER_SIZE;
         }
     }
